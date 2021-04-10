@@ -117,7 +117,7 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
                             'Validation Dice Coeff: {}'.format(val_score))
                         writer.add_scalar('Dice/test', val_score, global_step)
 
-                    writer.add_images('images', imgs, global_step)
+                    # writer.add_images('images', imgs, global_step)
                     if net.n_classes == 1:
                         writer.add_images(
                             'masks/true', true_masks, global_step)
@@ -130,8 +130,8 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
                 logging.info('Created checkpoint directory')
             except OSError:
                 pass
-            torch.save(net.state_dict(),
-                       dir_checkpoint + f'CP_epoch{epoch + 1}.pth')
+            torch.save(net.state_dict(), os.path.join(
+                dir_checkpoint, f'CP_epoch{epoch + 1}.pth'))
             logging.info(f'Checkpoint {epoch + 1} saved !')
 
     writer.close()
