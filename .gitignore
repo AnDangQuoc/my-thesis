@@ -1,0 +1,4 @@
+data/
+train_data/
+__pycache__
+runs
