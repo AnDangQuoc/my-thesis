@@ -19,7 +19,7 @@ import json
 
 
 import config as cfg
-from utils.dataset import BratDataSet
+from utils.dataset import BratDataSetWithStacking
 
 
 dir_checkpoint = './checkpoints/'
@@ -29,10 +29,10 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
 
     # Get file list
     fileList = ''
-    with open(os.path.join(cfg.ROOT_DATA, 'train.json'), 'r') as json_file:
+    with open('./stackTrain.json', 'r') as json_file:
         fileList = json.load(json_file)
 
-    dataset = BratDataSet(fileList=fileList, root=cfg.TRAIN_DATA)
+    dataset = BratDataSetWithStacking(fileList=fileList, root=cfg.TRAIN_DATA)
 
     n_val = int(len(dataset) * val_percent)
     n_train = len(dataset) - n_val
@@ -143,7 +143,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 logging.info(f'Using device {device}')
 
-net = UNet(n_channels=1, n_classes=5, bilinear=False)
+net = UNet(n_channels=4, n_classes=5, bilinear=False)
 
 logging.info(f'Network:\n'
              f'\t{net.n_channels} input channels\n'
