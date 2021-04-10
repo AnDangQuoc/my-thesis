@@ -32,8 +32,6 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
     with open(os.path.join(cfg.ROOT_DATA, 'train.json'), 'r') as json_file:
         fileList = json.load(json_file)
 
-    logging.info(f'Root Folder: {cfg.TRAIN_DATA}')
-
     dataset = BratDataSet(fileList=fileList, root=cfg.TRAIN_DATA)
 
     n_val = int(len(dataset) * val_percent)
@@ -42,9 +40,9 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
     train, val = random_split(dataset, [n_train, n_val])
 
     train_loader = DataLoader(
-        train, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=True)
+        train, batch_size=batch_size, shuffle=True, num_workers=8, pin_memory=True)
     val_loader = DataLoader(val, batch_size=batch_size, shuffle=False,
-                            num_workers=0, pin_memory=True, drop_last=True)
+                            num_workers=8, pin_memory=True, drop_last=True)
 
     writer = SummaryWriter(comment=f'LR_{lr}_BS_{batch_size}')
     global_step = 0
@@ -85,7 +83,6 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
                 true_masks = true_masks.to(device=device, dtype=mask_type)
 
                 masks_pred = net(imgs)
-                print(masks_pred)
                 loss = criterion(masks_pred, true_masks)
                 epoch_loss += loss.item()
                 writer.add_scalar('Loss/train', loss.item(), global_step)
