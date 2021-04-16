@@ -194,8 +194,8 @@ if __name__ == "__main__":
 
     try:
         train_net(net=net,
-                  epochs=5,
-                  batch_size=5,
+                  epochs=args.epochs,
+                  batch_size=args.batch,
                   lr=0.00001,
                   device=device,
                   val_percent=20 / 100,
