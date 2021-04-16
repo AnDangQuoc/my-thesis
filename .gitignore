@@ -2,3 +2,7 @@ data/
 train_data/
 __pycache__
 runs
+venv
+.DS_Store
+train_results
+checkpoints
