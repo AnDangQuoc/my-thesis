@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 
 
 from unet import UNet
-from utils.data_vis import plot_img_and_mask
 from utils.dataset import BratDataSet, BratDataSetWithStacking
 
 
