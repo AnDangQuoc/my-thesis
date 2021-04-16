@@ -69,8 +69,8 @@ def mask_to_image(mask):
     return img
 
 
-def show_result(img_channel_1, img_channel_2, img_channel_3, img_channel_4, result, segment):
-    fig = plt.figure('Segmentation', figsize=(11, 8))
+def show_result(file_name, img_channel_1, img_channel_2, img_channel_3, img_channel_4, result, segment):
+    fig = plt.figure(f'Segmentation {file_name}', figsize=(11, 8))
 
     rows = 2
     columns = 3
@@ -167,5 +167,5 @@ if __name__ == "__main__":
 
     result = mask_to_image(mask)
 
-    show_result(img_channel_1, img_channel_2, img_channel_3,
+    show_result(file_name, img_channel_1, img_channel_2, img_channel_3,
                 img_channel_4, result, segment)
