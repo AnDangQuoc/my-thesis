@@ -152,8 +152,8 @@ def get_args():
                         metavar='FILE',
                         help="Specify the file in which the model is stored")
 
-    parser.add_argument('--epochs', '-e', help='train epoch', default=5)
-    parser.add_argument('--batch', '-b', help='batch size', default=5)
+    parser.add_argument('--epochs', '-e',type=int, help='train epoch', default=5)
+    parser.add_argument('--batch', '-b',type=int, help='batch size', default=5)
 
 
     parser.add_argument('--type', '-t', help='model type', default='stack')
