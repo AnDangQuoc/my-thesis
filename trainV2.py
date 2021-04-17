@@ -168,8 +168,6 @@ def get_args():
 if __name__ == "__main__":
     args = get_args()
 
-    file_name = args.input
-
     model_checkpoint = args.model
     model_type = args.type
 
