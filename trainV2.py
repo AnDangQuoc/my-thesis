@@ -145,7 +145,7 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
 
 
 def get_args():
-    parser = argparse.ArgumentParser(description='Test Unet Model',
+    parser = argparse.ArgumentParser(description='Train Unet Model',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('--model', '-m', default='MODEL.pth',

@@ -63,8 +63,9 @@ def predict_img(net,
 def mask_to_image(mask):
     img = np.zeros((240, 240))
     for i in range(5):
-        result = Image.fromarray((mask[i] * 255).astype(np.uint8))
         img[mask[i]] = COLOR[i]
+
+        # result = Image.fromarray((mask[i] * 255).astype(np.uint8))
         # result.save(f'img_{i}.png')
     return img
 

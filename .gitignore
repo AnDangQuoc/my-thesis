@@ -6,3 +6,5 @@ venv
 .DS_Store
 train_results
 checkpoints
+
+val_data
