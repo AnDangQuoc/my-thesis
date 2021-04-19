@@ -1,16 +1,21 @@
 """ Full assembly of the parts to form the complete network """
 
 import torch.nn.functional as F
-
+import torch
 from .unet_parts import *
 
+from .coordattention import *
+
+
 class UNet(nn.Module):
-    def __init__(self, n_channels, n_classes, bilinear=True):
+    def __init__(self, n_channels, n_classes, bilinear=True, has_attention=True):
         super(UNet, self).__init__()
         self.n_channels = n_channels
         self.n_classes = n_classes
         self.bilinear = bilinear
+        self.has_attention = has_attention
 
+        self.att = CoordAtt(64, 64)
         self.inc = DoubleConv(n_channels, 64)
         self.down1 = Down(64, 128)
         self.down2 = Down(128, 256)
@@ -25,6 +30,8 @@ class UNet(nn.Module):
 
     def forward(self, x):
         x1 = self.inc(x)
+
+
         x2 = self.down1(x1)
         x3 = self.down2(x2)
         x4 = self.down3(x3)
@@ -33,5 +40,12 @@ class UNet(nn.Module):
         x = self.up2(x, x3)
         x = self.up3(x, x2)
         x = self.up4(x, x1)
+
+        # Multiply attention
+        if self.has_attention:
+            att = self.att(x1)
+            x = torch.matmul(x, att)
+
         logits = self.outc(x)
+        
         return logits
