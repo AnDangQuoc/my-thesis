@@ -180,7 +180,7 @@ if __name__ == "__main__":
 
     logging.info(f'Using device {device}')
 
-    if type == 'stack':
+    if model_type == 'stack':
         net = UNet(n_channels=4, n_classes=5, bilinear=False)
     else:
         net = UNet(n_channels=1, n_classes=5,  bilinear=False)
@@ -206,7 +206,7 @@ if __name__ == "__main__":
                   lr=0.00001,
                   device=device,
                   val_percent=20 / 100,
-                  type=type)
+                  type=model_type)
     except KeyboardInterrupt:
         torch.save(net.state_dict(), 'INTERRUPTED.pth')
         logging.info('Saved interrupt')
