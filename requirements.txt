@@ -5,3 +5,4 @@ tensorboard
 SimpleITK
 tqdm
 matplotlib
+torchsummary

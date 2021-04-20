@@ -11,6 +11,8 @@ from tqdm import tqdm
 
 from eval import eval_net
 from unet import UNet
+from torchsummary import summary
+
 
 from torch.utils.tensorboard import SummaryWriter
 from utils.dataset import BratDataSet, BratDataSetWithStacking
@@ -188,6 +190,13 @@ if __name__ == "__main__":
                  f'\t{net.n_classes} output channels (classes)\n'
                  f'\t{"Bilinear" if net.bilinear else "Transposed conv"} upscaling')
 
+
+    logging.info('------------- Net Summary --------------')
+    
+    summary(net, ( 4, 240, 240))
+
+    logging.info('----------------------------------------')
+    
     net.to(device=device)
 
     try:
