@@ -193,7 +193,7 @@ if __name__ == "__main__":
 
     logging.info('------------- Net Summary --------------')
     
-    summary(net, ( 4, 240, 240))
+    # summary(net, ( 4, 240, 240))
 
     logging.info('----------------------------------------')
     
