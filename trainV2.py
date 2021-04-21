@@ -186,6 +186,7 @@ if __name__ == "__main__":
         net = UNet(n_channels=1, n_classes=5,  bilinear=False)
 
     logging.info(f'Network:\n'
+                 f'\t model type {model_type}\n'
                  f'\t{net.n_channels} input channels\n'
                  f'\t{net.n_classes} output channels (classes)\n'
                  f'\t{"Bilinear" if net.bilinear else "Transposed conv"} upscaling')
