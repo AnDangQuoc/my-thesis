@@ -34,17 +34,21 @@ class DoubleConv(nn.Module):
         if not mid_channels:
             mid_channels = out_channels
 
-        self.conv2d_1 = nn.Conv2d(in_channels, mid_channels, kernel_size=3, padding=1)
+        self.conv2d_1 = nn.Conv2d(
+            in_channels, mid_channels, kernel_size=3, padding=1)
         self.batchNorm2d_1 = nn.BatchNorm2d(mid_channels)
         self.relu_1 = nn.ReLU(inplace=True)
 
-        self.conv2d_2 = nn.Conv2d(mid_channels, out_channels, kernel_size=3, padding=1)
+        self.conv2d_2 = nn.Conv2d(
+            mid_channels, out_channels, kernel_size=3, padding=1)
         self.batchNorm2d_2 = nn.BatchNorm2d(out_channels)
         self.relu_2 = nn.ReLU(inplace=True)
 
-        self.attention_1 = CoordAtt(inp_channels=mid_channels, oup_channels=mid_channels)
+        self.attention_1 = CoordAtt(
+            inp_channels=mid_channels, oup_channels=mid_channels)
 
-        self.attention_2 = CoordAtt(inp_channels=out_channels, oup_channels=out_channels)
+        self.attention_2 = CoordAtt(
+            inp_channels=out_channels, oup_channels=out_channels)
 
     def forward(self, x):
         x1 = self.conv2d_1(x)
@@ -52,14 +56,15 @@ class DoubleConv(nn.Module):
         x3 = self.relu_1(x2)
         att = self.attention_1(x1)
 
-        x3 = x3 * att
+        x3 = torch.matmul(x3,att)
         x4 = self.conv2d_2(x3)
         x5 = self.batchNorm2d_2(x4)
         x6 = self.relu_2(x5)
 
         att2 = self.attention_2(x4)
-        
-        return x6 * att2
+
+        out  = torch.matmul(x6, att2)
+        return out
 
 
 class Down(nn.Module):
