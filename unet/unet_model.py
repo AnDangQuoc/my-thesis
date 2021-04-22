@@ -31,6 +31,9 @@ class UNet(nn.Module):
     def forward(self, x):
         x1 = self.inc(x)
 
+        # # Multiply attention
+        # if self.has_attention:
+        #     x1 = self.att(x1)
 
         x2 = self.down1(x1)
         x3 = self.down2(x2)
@@ -41,10 +44,7 @@ class UNet(nn.Module):
         x = self.up3(x, x2)
         x = self.up4(x, x1)
 
-        # Multiply attention
-        if self.has_attention:
-            att = self.att(x1)
-            x = torch.matmul(x, att)
+        
 
         logits = self.outc(x)
         
