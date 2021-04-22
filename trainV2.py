@@ -42,8 +42,6 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
             fileList = json.load(json_file)
 
         dataset = BratDataSet(fileList=fileList, root=cfg.TRAIN_DATA)
-
-    dataset.to(device)
     
     n_val = int(len(dataset) * val_percent)
     n_train = len(dataset) - n_val
