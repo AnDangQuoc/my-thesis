@@ -56,15 +56,15 @@ class DoubleConv(nn.Module):
         x3 = self.relu_1(x2)
         att = self.attention_1(x1)
 
-        x3 = torch.matmul(x3,att)
+        # x3 = torch.matmul(x3,att)
         x4 = self.conv2d_2(x3)
         x5 = self.batchNorm2d_2(x4)
         x6 = self.relu_2(x5)
 
         att2 = self.attention_2(x4)
 
-        out  = torch.matmul(x6, att2)
-        return out
+        # out  = torch.matmul(x6, att2)
+        return x6
 
 
 class Down(nn.Module):
