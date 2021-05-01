@@ -108,10 +108,10 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
                 if global_step % (n_train // (10 * batch_size)) == 0:
                     for tag, value in net.named_parameters():
                         tag = tag.replace('.', '/')
-                        if value != None & value.data != None:
+                        if value != None and value.data != None:
                             writer.add_histogram(
                                 'weights/' + tag, value.data.cpu().numpy(), global_step)
-                        if value != None & value.grad != None:
+                        if value != None and value.grad != None:
                             writer.add_histogram(
                                 'grads/' + tag, value.grad.data.cpu().numpy(), global_step)
                     val_score = eval_net(net, val_loader, device)
