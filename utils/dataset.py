@@ -50,9 +50,10 @@ class BratDataSet(data.Dataset):
 
 
 class BratDataSetWithStacking(data.Dataset):
-    def __init__(self, fileList: str, root: str):
+    def __init__(self, fileList: str, root: str, convert_label: True):
         self.fileList = fileList
         self.root = root
+        self.convert_label = convert_label
 
         logging.info(f'Creating dataset with {len(self.fileList)} examples')
 
@@ -89,6 +90,11 @@ class BratDataSetWithStacking(data.Dataset):
         # Load input and groundtruth
         img = self.read_train_image(img_ID, self.root)
         mask = self.read_image(mask_ID, self.root)
+
+        # Convert num of labels to 4
+        if self.convert_label:
+            mask[mask==4] = 3
+
         return {
             'image':  torch.from_numpy(img).type(torch.FloatTensor),
             'mask':  torch.from_numpy(mask).type(torch.FloatTensor)
