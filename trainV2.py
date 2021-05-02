@@ -35,7 +35,7 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
             fileList = json.load(json_file)
 
         dataset = BratDataSetWithStacking(
-            fileList=fileList, root=cfg.TRAIN_DATA)
+            fileList=fileList, root=cfg.TRAIN_DATA, convert_label=True)
     else:
         fileList = ''
         with open(os.path.join(cfg.ROOT_DATA, 'train.json'), 'r') as json_file:
@@ -162,7 +162,6 @@ def get_args():
                         help='batch size', default=5)
 
     parser.add_argument('--type', '-t', help='model type', default='stack')
-    
 
     parser.add_argument('--mask-threshold', '-th', type=float,
                         help="Minimum probability value to consider a mask pixel white",
@@ -184,16 +183,15 @@ if __name__ == "__main__":
 
     logging.info(f'Using device {device}')
 
-
     n_channels = 1
-    n_classes=4
-    bilinear=False
-    
+    n_classes = 4
+    bilinear = False
+
     if model_type == 'stack':
-        n_channels =4
+        n_channels = 4
     else:
         n_channels = 1
- 
+
     net = UNet(n_channels, n_classes, bilinear)
 
     logging.info(f'Network:\n'
