@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from .coordattention import *
 
 
-class DoubleConvOrigin(nn.Module):
+class DoubleConv(nn.Module):
     """(convolution => [BN] => ReLU) * 2"""
 
     def __init__(self, in_channels, out_channels, mid_channels=None):
@@ -26,50 +26,50 @@ class DoubleConvOrigin(nn.Module):
         return self.double_conv(x)
 
 
-class DoubleConv(nn.Module):
-    """(convolution => [BN] => ReLU) * 2"""
+# class DoubleConv(nn.Module):
+#     """(convolution => [BN] => ReLU) * 2"""
 
-    def __init__(self, in_channels, out_channels, mid_channels=None, enable_attention=False):
-        super().__init__()
-        if not mid_channels:
-            mid_channels = out_channels
+#     def __init__(self, in_channels, out_channels, mid_channels=None, enable_attention=False):
+#         super().__init__()
+#         if not mid_channels:
+#             mid_channels = out_channels
 
-        self.enable_attention = enable_attention
+#         self.enable_attention = enable_attention
 
-        self.conv2d_1 = nn.Conv2d(
-            in_channels, mid_channels, kernel_size=3, padding=1)
-        self.batchNorm2d_1 = nn.BatchNorm2d(mid_channels)
-        self.relu_1 = nn.ReLU(inplace=True)
+#         self.conv2d_1 = nn.Conv2d(
+#             in_channels, mid_channels, kernel_size=3, padding=1)
+#         self.batchNorm2d_1 = nn.BatchNorm2d(mid_channels)
+#         self.relu_1 = nn.ReLU(inplace=True)
 
-        self.conv2d_2 = nn.Conv2d(
-            mid_channels, out_channels, kernel_size=3, padding=1)
-        self.batchNorm2d_2 = nn.BatchNorm2d(out_channels)
-        self.relu_2 = nn.ReLU(inplace=True)
+#         self.conv2d_2 = nn.Conv2d(
+#             mid_channels, out_channels, kernel_size=3, padding=1)
+#         self.batchNorm2d_2 = nn.BatchNorm2d(out_channels)
+#         self.relu_2 = nn.ReLU(inplace=True)
 
-        self.attention_1 = CoordAtt(
-            inp_channels=mid_channels, oup_channels=mid_channels)
+#         self.attention_1 = CoordAtt(
+#             inp_channels=mid_channels, oup_channels=mid_channels)
 
-        self.attention_2 = CoordAtt(
-            inp_channels=out_channels, oup_channels=out_channels)
+#         self.attention_2 = CoordAtt(
+#             inp_channels=out_channels, oup_channels=out_channels)
 
-    def forward(self, x):
-        x1 = self.conv2d_1(x)
-        x2 = self.batchNorm2d_1(x1)
-        x3 = self.relu_1(x2)
+#     def forward(self, x):
+#         x1 = self.conv2d_1(x)
+#         x2 = self.batchNorm2d_1(x1)
+#         x3 = self.relu_1(x2)
 
-        if self.enable_attention:
-            att = self.attention_1(x1)
-            x3 = torch.matmul(x3, att)
+#         if self.enable_attention:
+#             att = self.attention_1(x1)
+#             x3 = torch.matmul(x3, att)
 
-        x4 = self.conv2d_2(x3)
-        x5 = self.batchNorm2d_2(x4)
-        x6 = self.relu_2(x5)
+#         x4 = self.conv2d_2(x3)
+#         x5 = self.batchNorm2d_2(x4)
+#         x6 = self.relu_2(x5)
 
-        if self.enable_attention:
-            att2 = self.attention_2(x4)
-            x6 = torch.matmul(x6, att2)
+#         if self.enable_attention:
+#             att2 = self.attention_2(x4)
+#             x6 = torch.matmul(x6, att2)
 
-        return x6
+#         return x6
 
 
 class Down(nn.Module):
