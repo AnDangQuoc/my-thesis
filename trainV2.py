@@ -60,8 +60,8 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
         Epochs:          {epochs}
         Batch size:      {batch_size}
         Learning rate:   {lr}
-        Training size:   {n_train}
-        Validation size: {n_val}
+        Training size:   {len(train)}
+        Validation size: {len(val)}
         Checkpoints:     {save_cp}
         Device:          {device.type}
     ''')
@@ -184,7 +184,7 @@ if __name__ == "__main__":
     logging.info(f'Using device {device}')
 
     n_channels = 1
-    n_classes = 4
+    n_classes = 5
     bilinear = False
 
     if model_type == 'stack':
