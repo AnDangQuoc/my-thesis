@@ -122,8 +122,8 @@ class Up(nn.Module):
         # https://github.com/xiaopeng-liao/Pytorch-UNet/commit/8ebac70e633bac59fc22bb5195e513d5832fb3bd
         
         if self.enable_attention:
-            att = self.attention(x2)
-            x2 = torch.matmul(x2, att)
+            att = self.attention(x1)
+            x1 = torch.matmul(x1, att)
 
         x = torch.cat([x2, x1], dim=1)
 
