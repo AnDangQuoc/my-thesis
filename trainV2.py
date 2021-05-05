@@ -7,8 +7,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torch import optim
-# from tqdm import tqdm
-from tqdm.notebook import tqdm # USED FORNOTEBOOK
+from tqdm import tqdm
+# from tqdm.notebook import tqdm # USED FORNOTEBOOK
 
 from eval import eval_net
 from unet import UNet
