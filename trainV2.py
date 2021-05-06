@@ -163,7 +163,7 @@ def get_args():
     parser.add_argument('--batch', '-b', type=int,
                         help='batch size', default=5)
 
-    parser.add_argument('--name', '-t', help='model name', default='origin')
+    parser.add_argument('--name', '-n', help='model name', default='origin')
 
     parser.add_argument('--type', '-t', help='model type', default='stack')
 
