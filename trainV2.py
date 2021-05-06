@@ -185,8 +185,10 @@ if __name__ == "__main__":
     logging.info(f'Using device {device}')
 
     n_channels = 1
-    n_classes = 4
+    n_classes = 5
     bilinear = False
+
+
 
     if model_type == 'stack':
         n_channels = 4
