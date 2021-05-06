@@ -12,6 +12,7 @@ from tqdm import tqdm
 
 from eval import eval_net
 from unet import UNet
+from unetOriginal import UNet as UnetOrigin
 from torchsummary import summary
 
 
@@ -162,6 +163,8 @@ def get_args():
     parser.add_argument('--batch', '-b', type=int,
                         help='batch size', default=5)
 
+    parser.add_argument('--name', '-t', help='model name', default='origin')
+
     parser.add_argument('--type', '-t', help='model type', default='stack')
 
     parser.add_argument('--mask-threshold', '-th', type=float,
@@ -176,6 +179,7 @@ if __name__ == "__main__":
 
     model_checkpoint = args.model
     model_type = args.type
+    model_name = args.name
 
     logging.basicConfig(level=logging.INFO,
                         format='%(levelname)s: %(message)s')
@@ -188,14 +192,15 @@ if __name__ == "__main__":
     n_classes = 5
     bilinear = False
 
-
-
     if model_type == 'stack':
         n_channels = 4
     else:
         n_channels = 1
 
-    net = UNet(n_channels, n_classes, bilinear)
+    if model_name == 'origin':
+        net = UnetOrigin(n_channels, n_classes, bilinear)
+    else:
+        net = UNet(n_channels, n_classes, bilinear)
 
     logging.info(f'Network:\n'
                  f'\t model type {model_type}\n'
