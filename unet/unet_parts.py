@@ -95,7 +95,7 @@ class Up(nn.Module):
         self.enable_attention = enable_attention
         
         self.attention = CoordAtt(
-            inp_channels=out_channels, oup_channels=out_channels)
+            inp_channels=in_channels, oup_channels=in_channels)
 
         # if bilinear, use the normal convolutions to reduce the number of channels
         if bilinear:
@@ -109,6 +109,9 @@ class Up(nn.Module):
             self.conv = DoubleConv(in_channels, out_channels)
 
     def forward(self, x1, x2):
+        if self.enable_attention:
+            x1 = self.attention(x1)
+        
         x1 = self.up(x1)
 
         # input is CHW
@@ -120,11 +123,7 @@ class Up(nn.Module):
         # if you have padding issues, see
         # https://github.com/HaiyongJiang/U-Net-Pytorch-Unstructured-Buggy/commit/0e854509c2cea854e247a9c615f175f76fbb2e3a
         # https://github.com/xiaopeng-liao/Pytorch-UNet/commit/8ebac70e633bac59fc22bb5195e513d5832fb3bd
-        
-        if self.enable_attention:
-            x1 = self.attention(x1)
-            # x1 = torch.matmul(x1, att)
-
+    
         x = torch.cat([x2, x1], dim=1)
 
         return self.conv(x)
