@@ -177,7 +177,7 @@ def get_args():
 if __name__ == "__main__":
     args = get_args()
 
-    model_checkpoint = os.path.join(dir_checkpoint,args.model)
+    model_checkpoint = os.path.join(dir_checkpoint, args.model)
     model_type = args.type
     model_name = args.name
 
@@ -216,10 +216,9 @@ if __name__ == "__main__":
 
     # Load Model
     net.load_state_dict(
-        torch.load(args.load, map_location=device)
+        torch.load(model_checkpoint, map_location=device), strict=False
     )
-    logging.info(f'Model loaded from {args.load}')
-
+    logging.info(f'Model loaded from {model_checkpoint}')
 
     net.to(device=device)
 
