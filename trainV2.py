@@ -13,7 +13,7 @@ from tqdm import tqdm
 from eval import eval_net
 from unet import UNet
 from unetOriginal import UNet as UnetOrigin
-from torchsummary import summary
+from torchinfo import summary
 
 
 from torch.utils.tensorboard import SummaryWriter
@@ -210,7 +210,7 @@ if __name__ == "__main__":
 
     logging.info('------------- Net Summary --------------')
 
-    # summary(net, ( 4, 240, 240))
+    summary(net, input_size=(1, 4, 240, 240))
 
     logging.info('----------------------------------------')
 
