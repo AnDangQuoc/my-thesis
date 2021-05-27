@@ -7,3 +7,5 @@ tqdm
 matplotlib
 torchinfo
 seg-metrics
+PySimpleGUI
+pynrrd
