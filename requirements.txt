@@ -6,3 +6,4 @@ SimpleITK
 tqdm
 matplotlib
 torchinfo
+seg-metrics
