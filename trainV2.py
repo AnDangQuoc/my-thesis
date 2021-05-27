@@ -38,7 +38,7 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
 
         dataset = BratDataSetWithStacking(
             fileList=fileList, root=cfg.TRAIN_DATA, convert_label=True)
-    elif type =='v2':
+    elif type == 'v2':
         fileList = ''
         with open('./stackTrain.json', 'r') as json_file:
             fileList = json.load(json_file)
@@ -161,8 +161,7 @@ def get_args():
     parser = argparse.ArgumentParser(description='Train Unet Model',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('--model', '-m', default='MODEL.pth',
-                        metavar='FILE',
+    parser.add_argument('--model', '-m', metavar='FILE',
                         help="Specify the file in which the model is stored")
 
     parser.add_argument('--epochs', '-e', type=int,
@@ -184,7 +183,9 @@ def get_args():
 if __name__ == "__main__":
     args = get_args()
 
-    model_checkpoint = os.path.join(dir_checkpoint, args.model)
+    if args.model:
+        model_checkpoint = os.path.join(dir_checkpoint, args.model)
+
     model_type = args.type
     model_name = args.name
 
@@ -206,7 +207,6 @@ if __name__ == "__main__":
         n_classes = 4
     else:
         n_channels = 1
-        
 
     if model_name == 'origin':
         net = UnetOrigin(n_channels, n_classes, bilinear)
