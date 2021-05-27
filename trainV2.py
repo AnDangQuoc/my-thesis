@@ -17,7 +17,7 @@ from torchinfo import summary
 
 
 from torch.utils.tensorboard import SummaryWriter
-from utils.dataset import BratDataSet, BratDataSetWithStacking
+from utils.dataset import BratDataSet, BratDataSetWithStacking, BratDataSetV2
 from torch.utils.data import DataLoader, random_split
 import json
 
@@ -37,6 +37,13 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
             fileList = json.load(json_file)
 
         dataset = BratDataSetWithStacking(
+            fileList=fileList, root=cfg.TRAIN_DATA, convert_label=True)
+    elif type =='v2':
+        fileList = ''
+        with open('./stackTrain.json', 'r') as json_file:
+            fileList = json.load(json_file)
+
+        dataset = BratDataSetV2(
             fileList=fileList, root=cfg.TRAIN_DATA, convert_label=True)
     else:
         fileList = ''
@@ -194,8 +201,12 @@ if __name__ == "__main__":
 
     if model_type == 'stack':
         n_channels = 4
+    elif model_type == 'v2':
+        n_channels = 4
+        n_classes = 4
     else:
         n_channels = 1
+        
 
     if model_name == 'origin':
         net = UnetOrigin(n_channels, n_classes, bilinear)
@@ -215,10 +226,11 @@ if __name__ == "__main__":
     logging.info('----------------------------------------')
 
     # Load Model
-    net.load_state_dict(
-        torch.load(model_checkpoint, map_location=device), strict=False
-    )
-    logging.info(f'Model loaded from {model_checkpoint}')
+    if model_checkpoint:
+        net.load_state_dict(
+            torch.load(model_checkpoint, map_location=device), strict=False
+        )
+        logging.info(f'Model loaded from {model_checkpoint}')
 
     net.to(device=device)
 
