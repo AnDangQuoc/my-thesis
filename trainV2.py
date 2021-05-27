@@ -173,9 +173,6 @@ def get_args():
 
     parser.add_argument('--type', '-t', help='model type', default='stack')
 
-    parser.add_argument('--mask-threshold', '-th', type=float,
-                        help="Minimum probability value to consider a mask pixel white",
-                        default=0.5)
 
     return parser.parse_args()
 
