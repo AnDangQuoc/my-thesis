@@ -1,5 +1,7 @@
 import torch
 import torch.nn.functional as F
+import numpy as np
+
 
 def predict_img(net,
                 full_img,
@@ -26,3 +28,10 @@ def predict_img(net,
     full_mask = probs.squeeze().cpu().numpy()
 
     return full_mask > out_threshold
+
+
+def mask_to_image(mask, n_classes=4):
+    img = np.zeros((240, 240))
+    for i in range(n_classes):
+        img[mask[i]] = i
+    return img

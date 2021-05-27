@@ -10,16 +10,18 @@ from numpy import newaxis
 from PIL import Image
 import matplotlib.pyplot as plt
 import SimpleITK as sitk
+from torchinfo import summary
 
 
 from unet import UNet
 from unetOriginal import UNet as UnetOrigin
 
-from utils.predict import predict_img
+from utils.predict import predict_img, mask_to_image
 
 LAYER_SIZE = 155
 
 OUT_DIR = './results'
+
 
 def read_nii_file(image_path):
     img = sitk.ReadImage(image_path)
@@ -60,7 +62,7 @@ def get_args():
                         help="Specify the file in which the model is stored")
 
     parser.add_argument('--type', '-t', help='model type', default='stack')
-   
+
     parser.add_argument('--name', '-n', help='model name', default='origin')
 
     parser.add_argument('--mask-threshold', '-th', type=float,
@@ -77,14 +79,11 @@ if __name__ == "__main__":
     model_type = args.type
     model_name = args.name
 
-
     inputs = args.input
 
-    logging.info(inputs)
+    print(f'Input: {inputs}')
 
     FILE_LIST = os.listdir(inputs)
-
-    logging.info("Loading Model !")
 
     n_channels = 1
     n_classes = 5
@@ -103,18 +102,20 @@ if __name__ == "__main__":
     else:
         net = UNet(n_channels, n_classes, bilinear)
 
+    print('------------- Net Summary --------------')
 
-    net = UNet(n_channels=4, n_classes=5, bilinear=False)
+    summary(net, input_size=(1, 4, 240, 240))
+
+    print('----------------------------------------')
+
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     net.load_state_dict(torch.load(model_checkpoint, map_location=device))
 
-    logging.info("Model loaded !")
-
     for file_name in FILE_LIST:
         if file_name.startswith('.'):
             continue
-        logging.info(f'Segmenting file {file_name}')
+        print(f'Segmenting file {file_name}')
 
         t1_img, t1ce_img, t2_img, flair_img = read_image(inputs, file_name)
 
@@ -138,6 +139,11 @@ if __name__ == "__main__":
                 net=net, full_img=img, device=device, out_threshold=0.5)
 
             layer_seg_mask = predict_result.astype(int)
+            layer_seg_mask = mask_to_image(layer_seg_mask, n_classes)
+
+            # Convert label 3 to 4 for comparing
+            if n_classes == 4:
+                layer_seg_mask[layer_seg_mask == 3] = 4
 
             seg_mask[i] = layer_seg_mask
 
