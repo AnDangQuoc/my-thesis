@@ -13,46 +13,13 @@ import SimpleITK as sitk
 
 
 from unet import UNet
-from utils.dataset import BratDataSet, BratDataSetWithStacking
+from unetOriginal import UNet as UnetOrigin
+
+from utils.predict import predict_img
 
 LAYER_SIZE = 155
 
 OUT_DIR = './results'
-
-
-def predict_img(net,
-                full_img,
-                device,
-                out_threshold=0.5):
-    net.eval()
-
-    # img = torch.from_numpy(BratDataSetWithStacking.preprocess(full_img, scale_factor))
-
-    img = torch.from_numpy(full_img)
-    img = img.unsqueeze(0)
-
-    img = img.to(device=device, dtype=torch.float32)
-
-    with torch.no_grad():
-        output = net(img)
-
-        if net.n_classes > 1:
-            probs = F.softmax(output, dim=1)
-        else:
-            probs = torch.sigmoid(output)
-
-    probs = probs.squeeze(0)
-
-    full_mask = probs.squeeze().cpu().numpy()
-
-    full_mask = full_mask > out_threshold
-
-    seg_mask = np.zeros((240, 240))
-    for i in range(5):
-        seg_mask[full_mask[i]] = i
-
-    return seg_mask
-
 
 def read_nii_file(image_path):
     img = sitk.ReadImage(image_path)
@@ -93,6 +60,8 @@ def get_args():
                         help="Specify the file in which the model is stored")
 
     parser.add_argument('--type', '-t', help='model type', default='stack')
+   
+    parser.add_argument('--name', '-n', help='model name', default='origin')
 
     parser.add_argument('--mask-threshold', '-th', type=float,
                         help="Minimum probability value to consider a mask pixel white",
@@ -105,6 +74,10 @@ if __name__ == "__main__":
     args = get_args()
 
     model_checkpoint = args.model
+    model_type = args.type
+    model_name = args.name
+
+
     inputs = args.input
 
     logging.info(inputs)
@@ -112,6 +85,24 @@ if __name__ == "__main__":
     FILE_LIST = os.listdir(inputs)
 
     logging.info("Loading Model !")
+
+    n_channels = 1
+    n_classes = 5
+    bilinear = False
+
+    if model_type == 'stack':
+        n_channels = 4
+    elif model_type == 'v2':
+        n_channels = 4
+        n_classes = 4
+    else:
+        n_channels = 1
+
+    if model_name == 'origin':
+        net = UnetOrigin(n_channels, n_classes, bilinear)
+    else:
+        net = UNet(n_channels, n_classes, bilinear)
+
 
     net = UNet(n_channels=4, n_classes=5, bilinear=False)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -143,7 +134,11 @@ if __name__ == "__main__":
             img = np.concatenate(
                 (img_channel_1, img_channel_2, img_channel_3, img_channel_4))
 
-            predict_result = predict_img(net=net, full_img=img, device=device)
-            seg_mask[i] = predict_result
+            predict_result = predict_img(
+                net=net, full_img=img, device=device, out_threshold=0.5)
+
+            layer_seg_mask = predict_result.astype(int)
+
+            seg_mask[i] = layer_seg_mask
 
         write_seg_result(file_name, seg_mask)
