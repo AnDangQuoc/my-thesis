@@ -8,3 +8,9 @@ train_results
 checkpoints
 
 val_data
+devdata
+
+**.zip
+**.gz
+
+**.npy
