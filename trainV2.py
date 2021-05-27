@@ -183,6 +183,8 @@ def get_args():
 if __name__ == "__main__":
     args = get_args()
 
+    model_checkpoint = False
+    
     if args.model:
         model_checkpoint = os.path.join(dir_checkpoint, args.model)
 
