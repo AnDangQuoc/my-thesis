@@ -33,14 +33,14 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
     # Get file list
     if type == 'stack':
         fileList = ''
-        with open('./stackTrain.json', 'r') as json_file:
+        with open(os.path.join(cfg.ROOT_DATA,'stackTrain.json'), 'r') as json_file:
             fileList = json.load(json_file)
 
         dataset = BratDataSetWithStacking(
             fileList=fileList, root=cfg.TRAIN_DATA, convert_label=True)
     elif type == 'v2':
         fileList = ''
-        with open('./stackTrain.json', 'r') as json_file:
+        with open(os.path.join(cfg.ROOT_DATA,'stackTrain.json'), 'r') as json_file:
             fileList = json.load(json_file)
 
         dataset = BratDataSetV2(
