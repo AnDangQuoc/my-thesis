@@ -119,7 +119,7 @@ if __name__ == "__main__":
 
         t1_img, t1ce_img, t2_img, flair_img = read_image(inputs, file_name)
 
-        seg_mask = np.zeros((155, 240, 240))
+        seg_mask = np.zeros((155, 240, 240), dtype=np.int16)
 
         for i in range(LAYER_SIZE):
             t1_layer = t1_img[i]
@@ -138,7 +138,7 @@ if __name__ == "__main__":
             predict_result = predict_img(
                 net=net, full_img=img, device=device, out_threshold=0.5)
 
-            layer_seg_mask = predict_result.astype(int)
+            layer_seg_mask = predict_result.astype(np.int16)
             layer_seg_mask = mask_to_image(layer_seg_mask, n_classes)
 
             # Convert label 3 to 4 for comparing
