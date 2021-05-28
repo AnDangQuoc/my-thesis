@@ -33,5 +33,5 @@ def predict_img(net,
 def mask_to_image(mask, n_classes=4):
     img = np.zeros((240, 240))
     for i in range(n_classes):
-        img[mask[i]] = i
+        img[mask[i]] = np.int16(i)
     return img
