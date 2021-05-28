@@ -17,7 +17,7 @@ from unet import UNet
 from unetOriginal import UNet as UnetOrigin
 
 from utils.predict import predict_img, mask_to_image
-from utils.own_itk import write_itk_image
+from utils.own_itk import write_itk_image, get_itk_image, get_itk_array
 
 LAYER_SIZE = 155
 
@@ -120,7 +120,7 @@ if __name__ == "__main__":
 
         t1_img, t1ce_img, t2_img, flair_img = read_image(inputs, file_name)
 
-        seg_mask = read_nii_file('./template/Template.nii.gz')
+        seg_mask = get_itk_array('./template/Template.nii.gz')
 
         for i in range(LAYER_SIZE):
             t1_layer = t1_img[i]
@@ -148,4 +148,4 @@ if __name__ == "__main__":
 
             seg_mask[i] = layer_seg_mask.astype(np.int16)
 
-        write_itk_image(seg_mask, file_name)
+        write_itk_image(seg_mask, os.path.join(OUT_DIR, f'{file_name}.nii.gz'))

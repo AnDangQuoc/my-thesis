@@ -75,6 +75,7 @@ def write_itk_image(image, path):
         image = make_itk_image(image)
 
     writer = itk.ImageFileWriter()
+    writer.SetImageIO('NiftiImageIO')
     writer.SetFileName(path)
 
     if os.path.splitext(path)[1] == '.nii':
