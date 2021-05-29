@@ -13,6 +13,7 @@ from tqdm import tqdm
 from eval import eval_net
 from unet import UNet
 from unetOriginal import UNet as UnetOrigin
+from unetFullAttention import UNet as UnetFull
 from torchinfo import summary
 
 
@@ -33,14 +34,14 @@ def train_net(net, device, epochs=5, batch_size=1, lr=0.001, val_percent=0.1, sa
     # Get file list
     if type == 'stack':
         fileList = ''
-        with open(os.path.join(cfg.ROOT_DATA,'stackTrain.json'), 'r') as json_file:
+        with open(os.path.join(cfg.ROOT_DATA, 'stackTrain.json'), 'r') as json_file:
             fileList = json.load(json_file)
 
         dataset = BratDataSetWithStacking(
             fileList=fileList, root=cfg.TRAIN_DATA, convert_label=True)
     elif type == 'v2':
         fileList = ''
-        with open(os.path.join(cfg.ROOT_DATA,'stackTrain.json'), 'r') as json_file:
+        with open(os.path.join(cfg.ROOT_DATA, 'stackTrain.json'), 'r') as json_file:
             fileList = json.load(json_file)
 
         dataset = BratDataSetV2(
@@ -173,7 +174,6 @@ def get_args():
 
     parser.add_argument('--type', '-t', help='model type', default='stack')
 
-
     return parser.parse_args()
 
 
@@ -181,7 +181,7 @@ if __name__ == "__main__":
     args = get_args()
 
     model_checkpoint = False
-    
+
     if args.model:
         model_checkpoint = os.path.join(dir_checkpoint, args.model)
 
@@ -209,6 +209,8 @@ if __name__ == "__main__":
 
     if model_name == 'origin':
         net = UnetOrigin(n_channels, n_classes, bilinear)
+    elif model_name == 'full':
+        net = UnetFull(n_channels, n_classes, bilinear)
     else:
         net = UNet(n_channels, n_classes, bilinear)
 
