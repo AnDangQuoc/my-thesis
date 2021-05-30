@@ -16,6 +16,7 @@ from torchinfo import summary
 from unet import UNet
 from unetOriginal import UNet as UnetOrigin
 from unetFullAttention import UNet as UNetFullAttention
+from unetFullAttentionReversePlace import UNet as UnetFullReplace
 
 from utils.predict import predict_img, mask_to_image
 from utils.own_itk import write_itk_image, get_itk_image, get_itk_array
@@ -103,6 +104,8 @@ if __name__ == "__main__":
         net = UnetOrigin(n_channels, n_classes, bilinear)
     elif model_name == 'full':
         net = UNetFullAttention(n_channels, n_classes, bilinear)
+    elif model_name == 'reve':
+        net = UnetFullReplace(n_channels, n_classes, bilinear)
     else:
         net = UNet(n_channels, n_classes, bilinear)
 

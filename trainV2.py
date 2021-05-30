@@ -14,6 +14,7 @@ from eval import eval_net
 from unet import UNet
 from unetOriginal import UNet as UnetOrigin
 from unetFullAttention import UNet as UnetFull
+from unetFullAttentionReversePlace import UNet as UnetFullReplace
 from torchinfo import summary
 
 
@@ -211,6 +212,8 @@ if __name__ == "__main__":
         net = UnetOrigin(n_channels, n_classes, bilinear)
     elif model_name == 'full':
         net = UnetFull(n_channels, n_classes, bilinear)
+    elif model_name == 'reve':
+        net = UnetFullReplace(n_channels, n_classes, bilinear)
     else:
         net = UNet(n_channels, n_classes, bilinear)
 
