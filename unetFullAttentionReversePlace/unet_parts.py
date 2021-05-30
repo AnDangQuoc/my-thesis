@@ -53,8 +53,9 @@ class Up(nn.Module):
 
         self.enable_attention = enable_attention
 
+        mid_channels = in_channels // 2
         self.attention = CoordAtt(
-            inp_channels=in_channels, oup_channels=in_channels)
+            inp_channels=mid_channels, oup_channels=mid_channels)
 
         self.attention_gate = CoordAtt(
             inp_channels=out_channels, oup_channels=out_channels)
