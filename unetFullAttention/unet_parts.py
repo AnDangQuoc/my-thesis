@@ -37,12 +37,12 @@ class Down(nn.Module):
         )
 
         self.attention = CoordAtt(
-            inp_channels=out_channels, oup_channels=out_channels)
+            inp_channels=in_channels, oup_channels=in_channels)
 
     def forward(self, x):
-        x = self.maxpool_conv(x)
+        x = self.attention(x)
 
-        return self.attention(x)
+        return self.maxpool_conv(x)
 
 
 class Up(nn.Module):
