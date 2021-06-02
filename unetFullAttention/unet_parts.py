@@ -73,7 +73,7 @@ class Up(nn.Module):
     def forward(self, x1, x2):
         if self.enable_attention:
             x1 = self.attention(x1)
-            x2 = self.attention_gate(x2)
+            # x2 = self.attention_gate(x2)
 
         x1 = self.up(x1)
 
