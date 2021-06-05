@@ -18,6 +18,7 @@ from unetOriginal import UNet as UnetOrigin
 from unetFullAttention import UNet as UNetFullAttention
 from unetFullAttentionReversePlace import UNet as UnetFullReplace
 from unetMixed import UNet as UnetMixed
+from unetMixedV2 import UNet as UnetMixedV2
 
 
 from utils.predict import predict_img, mask_to_image
@@ -110,6 +111,8 @@ if __name__ == "__main__":
         net = UnetFullReplace(n_channels, n_classes, bilinear)
     elif model_name == 'mix':
         net = UnetMixed(n_channels, n_classes, bilinear)
+    elif model_name == 'mix_v2':
+        net = UnetMixedV2(n_channels, n_classes, bilinear)
     else:
         net = UNet(n_channels, n_classes, bilinear)
 
