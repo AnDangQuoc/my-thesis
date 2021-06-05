@@ -2,7 +2,7 @@
 
 import torch.nn.functional as F
 import torch
-from .unet_parts import *
+from .unet_parts_v2 import *
 
 class UNet(nn.Module):
     def __init__(self, n_channels, n_classes, bilinear=True, enable_attention=True):
