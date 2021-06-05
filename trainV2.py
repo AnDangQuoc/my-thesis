@@ -17,6 +17,7 @@ from unetFullAttention import UNet as UnetFull
 from unetFullAttentionReversePlace import UNet as UnetFullReplace
 from unetMixed import UNet as UnetMixed
 from unetMixedV2 import UNet as UnetMixedV2
+from attentionGate import AttU_Net
 from torchinfo import summary
 
 
@@ -220,6 +221,8 @@ if __name__ == "__main__":
         net = UnetMixed(n_channels, n_classes, bilinear)
     elif model_name == 'mix_v2':
         net = UnetMixedV2(n_channels, n_classes, bilinear)
+    elif model_name == 'gate':
+        net = AttU_Net(n_channels, n_classes)
     else:
         net = UNet(n_channels, n_classes, bilinear)
 
