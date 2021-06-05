@@ -19,7 +19,7 @@ from unetFullAttention import UNet as UNetFullAttention
 from unetFullAttentionReversePlace import UNet as UnetFullReplace
 from unetMixed import UNet as UnetMixed
 from unetMixedV2 import UNet as UnetMixedV2
-from attentionGate import AttU_Net
+from unetGate import UNet as UnetGate
 
 
 from utils.predict import predict_img, mask_to_image
@@ -115,7 +115,7 @@ if __name__ == "__main__":
     elif model_name == 'mix_v2':
         net = UnetMixedV2(n_channels, n_classes, bilinear)
     elif model_name == 'gate':
-        net = AttU_Net(n_channels, n_classes)
+        net = UnetGate(n_channels, n_classes)
     else:
         net = UNet(n_channels, n_classes, bilinear)
 
