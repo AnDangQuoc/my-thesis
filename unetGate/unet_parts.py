@@ -45,6 +45,8 @@ class Up(nn.Module):
     def __init__(self, in_channels, out_channels, bilinear=True, enable_attention=True):
         super().__init__()
         self.enable_attention = enable_attention
+        self.attention = Attention_block(
+            F_g=in_channels // 2, F_l=in_channels // 2, F_int=in_channels//4)
         # if bilinear, use the normal convolutions to reduce the number of channels
         if bilinear:
             self.up = nn.Upsample(
@@ -53,8 +55,6 @@ class Up(nn.Module):
         else:
             self.up = nn.ConvTranspose2d(
                 in_channels, in_channels // 2, kernel_size=2, stride=2)
-            self.attention = Attention_block(
-                F_g=in_channels // 2, F_l=in_channels // 2, F_int=in_channels//4)
             self.conv = DoubleConv(in_channels, out_channels)
 
     def forward(self, x1, x2):
