@@ -26,17 +26,23 @@ class h_swish(nn.Module):
 class CoordAtt(nn.Module):
     def __init__(self, inp_channels, oup_channels, reduction=32):
         super(CoordAtt, self).__init__()
-        self.pool_h = nn.AdaptiveAvgPool2d((None, 1))
-        self.pool_w = nn.AdaptiveAvgPool2d((1, None))
+        # self.pool_h = nn.AdaptiveAvgPool2d((None, 1))
+        # self.pool_w = nn.AdaptiveAvgPool2d((1, None))
+
+        self.pool_h = nn.AdaptiveMaxPool2d((None, 1))
+        self.pool_w = nn.AdaptiveMaxPool2d((1, None))
 
         mip_channels = max(8, inp_channels // reduction)
 
-        self.conv1 = nn.Conv2d(inp_channels, mip_channels, kernel_size=1, stride=1, padding=0)
+        self.conv1 = nn.Conv2d(inp_channels, mip_channels,
+                               kernel_size=1, stride=1, padding=0)
         self.bn1 = nn.BatchNorm2d(mip_channels)
         self.act = h_swish()
 
-        self.conv_h = nn.Conv2d(mip_channels, oup_channels, kernel_size=1, stride=1, padding=0)
-        self.conv_w = nn.Conv2d(mip_channels, oup_channels, kernel_size=1, stride=1, padding=0)
+        self.conv_h = nn.Conv2d(
+            mip_channels, oup_channels, kernel_size=1, stride=1, padding=0)
+        self.conv_w = nn.Conv2d(
+            mip_channels, oup_channels, kernel_size=1, stride=1, padding=0)
 
     def forward(self, x):
         identity = x
