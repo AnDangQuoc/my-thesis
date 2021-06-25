@@ -144,6 +144,11 @@ if __name__ == "__main__":
             t1ce_layer = t1ce_img[i]
             flair_layer = flair_img[i]
 
+            t1_layer = t1_layer / np.max(t1_layer)
+            t2_layer = t2_layer / np.max(t2_layer)
+            t1ce_layer = t1ce_layer / np.max(t1ce_layer)
+            flair_layer = flair_layer / np.max(flair_layer)
+
             img_channel_1 = t1_layer[newaxis, :, :]
             img_channel_2 = t2_layer[newaxis, :, :]
             img_channel_3 = t1ce_layer[newaxis, :, :]

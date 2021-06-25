@@ -119,6 +119,11 @@ class BratDataSetV2(data.Dataset):
         t1ce_img = self.read_image(img_ID+'_002.npy', self.root)
         flair_img = self.read_image(img_ID+'_003.npy', self.root)
 
+        t1_img = t1_img / np.max(t1_img)
+        t2_img = t2_img / np.max(t2_img)
+        t1ce_img = t1ce_img / np.max(t1ce_img)
+        flair_img = flair_img / np.max(flair_img)
+
         t1_img = t1_img[newaxis, :, :]
         t2_img = t2_img[newaxis, :, :]
         t1ce_img = t1ce_img[newaxis, :, :]
