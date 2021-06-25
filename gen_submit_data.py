@@ -20,6 +20,8 @@ from unetFullAttentionReversePlace import UNet as UnetFullReplace
 from unetMixed import UNet as UnetMixed
 from unetMixedV2 import UNet as UnetMixedV2
 from unetGate import UNet as UnetGate
+from MCAUNet import UNet as MCAUNet
+from CAUNet import UNet as CAUNet
 
 
 from utils.predict import predict_img, mask_to_image
@@ -116,6 +118,10 @@ if __name__ == "__main__":
         net = UnetMixedV2(n_channels, n_classes, bilinear)
     elif model_name == 'gate':
         net = UnetGate(n_channels, n_classes)
+    elif model_name == 'mca':
+        net = MCAUNet(n_channels, n_classes, bilinear)
+    elif model_name == 'ca':
+        net = CAUNet(n_channels, n_classes, bilinear)
     else:
         net = UNet(n_channels, n_classes, bilinear)
 
@@ -144,10 +150,14 @@ if __name__ == "__main__":
             t1ce_layer = t1ce_img[i]
             flair_layer = flair_img[i]
 
-            t1_layer = t1_layer / np.max(t1_layer)
-            t2_layer = t2_layer / np.max(t2_layer)
-            t1ce_layer = t1ce_layer / np.max(t1ce_layer)
-            flair_layer = flair_layer / np.max(flair_layer)
+            if np.max(t1_layer) > 0:
+                t1_layer = t1_layer / np.max(t1_layer)
+            if np.max(t2_layer) > 0:
+                t2_layer = t2_layer / np.max(t2_layer)
+            if np.max(t1ce_layer) > 0:
+                t1ce_layer = t1ce_layer / np.max(t1ce_layer)
+            if np.max(flair_layer) > 0:
+                flair_layer = flair_layer / np.max(flair_layer)
 
             img_channel_1 = t1_layer[newaxis, :, :]
             img_channel_2 = t2_layer[newaxis, :, :]

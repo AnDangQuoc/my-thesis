@@ -14,10 +14,12 @@ from eval import eval_net
 from unet import UNet
 from unetOriginal import UNet as UnetOrigin
 from unetFullAttention import UNet as UnetFull
-from unetFullAttentionReversePlace import UNet as UnetFullReplace
+from unetFullAttentionReversePlace import UNet as UnetFullReplace  # MCA model
 from unetMixed import UNet as UnetMixed
 from unetMixedV2 import UNet as UnetMixedV2
 from unetGate import UNet as UnetGate
+from MCAUNet import UNet as MCAUNet
+from CAUNet import UNet as CAUNet
 from torchinfo import summary
 
 
@@ -223,6 +225,10 @@ if __name__ == "__main__":
         net = UnetMixedV2(n_channels, n_classes, bilinear)
     elif model_name == 'gate':
         net = UnetGate(n_channels, n_classes)
+    elif model_name == 'mca':
+        net = MCAUNet(n_channels, n_classes, bilinear)
+    elif model_name == 'ca':
+        net = CAUNet(n_channels, n_classes, bilinear)
     else:
         net = UNet(n_channels, n_classes, bilinear)
 
