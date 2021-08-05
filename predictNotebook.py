@@ -178,17 +178,17 @@ if __name__ == "__main__":
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     originNet.load_state_dict(torch.load(
-        'checkpoints/UNet/CP_epoch5.pth', map_location=device))
+        'checkpoints/demoCheckpoint/UNet/CP_epoch5.pth', map_location=device))
 
     CANet.load_state_dict(torch.load(
-        'checkpoints/CAUNet/CP_epoch5.pth', map_location=device))
+        'checkpoints/demoCheckpoint/CAUNet/CP_epoch5.pth', map_location=device))
 
     MaxPoolNet.load_state_dict(torch.load(
-        'checkpoints/MCAUNet/CP_epoch5.pth', map_location=device))
+        'checkpoints/demoCheckpoint/MCAUNet/CP_epoch5.pth', map_location=device))
 
     logging.info("Model loaded !")
 
-    root = './data/train'
+    root = './data/demo'
     img_channel_1 = f'{file_name}_000.npy'
     img_channel_2 = f'{file_name}_001.npy'
     img_channel_3 = f'{file_name}_002.npy'
